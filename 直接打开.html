@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>明曦元启 - 原APK精确复刻版</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ff0088ff, #4a90e2);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            color: white;
+        }
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .description {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+        .launch-btn {
+            background: white;
+            color: #ff0088ff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        .launch-btn:hover {
+            transform: translateY(-2px);
+        }
+        .features {
+            margin-top: 30px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">明曦元启</div>
+    <div class="description">
+        原Android APK精确1:1复刻版本<br>
+        基于APK逆向分析，完整重现所有原始功能和界面
+    </div>
+    
+    <button class="launch-btn" onclick="launchApp()">启动应用</button>
+    
+    <div class="features">
+        ✅ LauncherActivity - 3秒启动屏幕<br>
+        ✅ LoginActivity - QQ登录界面<br>
+        ✅ LiteActivity - 主游戏界面<br>
+        ✅ ScriptActivity - 脚本管理系统<br>
+        ✅ 原版UI颜色 (#ff0088ff)<br>
+        ✅ 原版按钮功能 (重登/换频/微操/脚本)<br>
+        ✅ Watcher战斗监控系统<br>
+        ✅ 完整脚本管理功能
+    </div>
+
+    <script>
+        function launchApp() {
+            // 直接通过file协议加载原版页面
+            const originalPath = 'file:///Users/yuchenxu/Downloads/mingxi-web/index-original.html';
+            
+            // 尝试打开新窗口
+            const newWindow = window.open(originalPath, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+            
+            if (!newWindow) {
+                // 如果弹窗被阻止，直接跳转
+                window.location.href = originalPath;
+            }
+            
+            // 同时提示用户手动打开
+            setTimeout(() => {
+                alert(`如果应用没有自动打开，请手动打开文件:\\n\\n/Users/yuchenxu/Downloads/mingxi-web/index-original.html\\n\\n或者使用浏览器打开该文件路径`);
+            }, 2000);
+        }
+        
+        // 页面加载后3秒自动启动（模拟原APK启动屏幕）
+        setTimeout(() => {
+            console.log('正在启动明曦元启原APK复刻版...');
+            document.querySelector('.launch-btn').style.animation = 'pulse 1s infinite';
+        }, 3000);
+    </script>
+    
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</body>
+</html>

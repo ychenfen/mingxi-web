@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>明曦元启 Web版</title>
+    <meta name="theme-color" content="#2196F3">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: white;
+            margin: 10px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            background: #2196F3;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tab-container {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: transparent;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .tab.active {
+            background: white;
+            border-bottom: 2px solid #2196F3;
+            color: #2196F3;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .login-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .qq-login-btn {
+            background: #12b7f5;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .qq-login-btn:hover {
+            background: #0ea5e9;
+            transform: translateY(-2px);
+        }
+        
+        .script-area {
+            display: none;
+        }
+        
+        .script-area.active {
+            display: block;
+        }
+        
+        .script-editor {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        .btn-group {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .game-frame {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .game-frame.active {
+            display: block;
+        }
+        
+        .config-section {
+            display: none;
+        }
+        
+        .config-section.active {
+            display: block;
+        }
+        
+        .config-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .config-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .config-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-active {
+            background-color: #28a745;
+        }
+        
+        .status-inactive {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>明曦元启</h1>
+            <div id="user-info">未登录</div>
+        </div>
+        
+        <div class="tab-container">
+            <button class="tab active" onclick="switchTab('login')">登录</button>
+            <button class="tab" onclick="switchTab('game')">游戏</button>
+            <button class="tab" onclick="switchTab('script')">脚本</button>
+            <button class="tab" onclick="switchTab('config')">配置</button>
+        </div>
+        
+        <div class="content">
+            <!-- 登录页面 -->
+            <div id="login-section" class="login-section">
+                <h2>欢迎使用明曦元启</h2>
+                <p style="margin: 20px 0; color: #666;">请先登录QQ账户以继续使用</p>
+                <a href="#" class="qq-login-btn" onclick="loginWithQQ()">
+                    QQ登录
+                </a>
+            </div>
+            
+            <!-- 游戏页面 -->
+            <div id="game-section" style="display: none;">
+                <iframe id="game-frame" class="game-frame" 
+                        src="about:blank" 
+                        frameborder="0">
+                </iframe>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="loadGame()">加载游戏</button>
+                    <button class="btn btn-secondary" onclick="toggleFullscreen()">全屏模式</button>
+                </div>
+            </div>
+            
+            <!-- 脚本页面 -->
+            <div id="script-section" class="script-area">
+                <h3>高级脚本执行器</h3>
+                <textarea id="script-editor" class="script-editor" 
+                          placeholder="支持UserScript格式和普通JavaScript...">
+// ==UserScript==
+// @name        明曦自动战斗脚本
+// @version     1.0
+// @description 自动化战斗和升级
+// ==UserScript==
+
+// 使用明曦API进行自动化
+function autoBattle() {
+    // 启用自动战斗
+    mingxi.battle.enableAutoBattle('aggressive');
+    
+    // 等待战斗开始
+    mingxi.wait(2000).then(() => {
+        console.log('开始自动战斗');
+        
+        // 点击战斗按钮
+        mingxi.clickElement('.battle-btn');
+    });
+}
+
+// 自动升级脚本
+function autoLevelUp() {
+    const gameData = mingxi.getGameData();
+    console.log('当前游戏数据:', gameData);
+    
+    // 如果血量过低，使用药水
+    if (gameData.playerInfo && gameData.playerInfo.hp < 50) {
+        mingxi.equipment.useItem(1001); // 使用普通药水
+    }
+    
+    // 如果不在战斗中，寻找敌人
+    if (!gameData.inBattle) {
+        mingxi.clickElement('.wild-pokemon');
+    }
+}
+
+// 执行自动化
+autoBattle();
+setInterval(autoLevelUp, 5000);
+                </textarea>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="executeScript()">执行脚本</button>
+                    <button class="btn btn-secondary" onclick="clearScript()">清空</button>
+                    <button class="btn btn-secondary" onclick="saveScript()">保存脚本</button>
+                    <button class="btn btn-secondary" onclick="loadScript()">加载脚本</button>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>自动化控制</h4>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="toggleAutoBattle()">自动战斗</button>
+                        <button class="btn btn-secondary" onclick="toggleNetworkMonitor()">网络监控</button>
+                        <button class="btn btn-secondary" onclick="toggleGameMonitor()">状态监控</button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>游戏状态</h4>
+                    <div id="game-status" style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre; max-height: 200px; overflow-y: auto; font-size: 12px;">
+正在获取游戏数据...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 配置页面 -->
+            <div id="config-section" class="config-section">
+                <h3>游戏配置</h3>
+                
+                <div class="config-item">
+                    <div class="config-label">战斗策略</div>
+                    <select class="config-input" id="battle-strategy">
+                        <option value="aggressive">攻击型</option>
+                        <option value="defensive">防守型</option>
+                        <option value="balanced">平衡型</option>
+                    </select>
+                </div>
+                
+                <div class="config-item">
+                    <div class="config-label">自动使用道具</div>
+                    <input type="checkbox" id="auto-use-items"> 
+                    <label for="auto-use-items">自动使用回复道具</label>
+                </div>
+                
+                <div class="config-item">
+                    <div class="config-label">血量阈值</div>
+                    <input type="range" class="config-input" id="hp-threshold" min="10" max="90" value="30">
+                    <span id="hp-threshold-value">30%</span>
+                </div>
+                
+                <div class="config-item">
+                    <div class="config-label">精灵自动切换</div>
+                    <input type="checkbox" id="auto-switch-spirit"> 
+                    <label for="auto-switch-spirit">血量过低自动切换精灵</label>
+                </div>
+                
+                <div class="config-item">
+                    <div class="config-label">网络监控</div>
+                    <input type="checkbox" id="network-monitoring"> 
+                    <label for="network-monitoring">启用网络数据包监控</label>
+                </div>
+                
+                <div class="config-item">
+                    <div class="config-label">高级设置</div>
+                    <textarea class="config-input" id="advanced-config" rows="4" 
+                              placeholder="JSON格式的高级配置...">
+{
+  "battleDelay": 1000,
+  "autoLevelUp": true,
+  "preferredElements": ["火", "水", "草"]
+}
+                    </textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="saveConfig()">保存配置</button>
+                    <button class="btn btn-secondary" onclick="loadConfig()">加载配置</button>
+                    <button class="btn btn-secondary" onclick="resetConfig()">重置配置</button>
+                    <button class="btn btn-secondary" onclick="exportConfig()">导出配置</button>
+                    <button class="btn btn-secondary" onclick="importConfig()">导入配置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
