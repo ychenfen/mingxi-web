@@ -1,4 +1,18 @@
-# 明曦元启 Web版 部署说明
+# 🎮 明曦元启 Web版 | MingXi Web PWA
+
+<div align="center">
+
+![GitHub stars](https://img.shields.io/github/stars/ychenfen/mingxi-web?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/ychenfen/mingxi-web?style=flat-square)
+![GitHub license](https://img.shields.io/github/license/ychenfen/mingxi-web?style=flat-square)
+
+**🚀 [立即体验](https://ychenfen.github.io/mingxi-web/) | [Experience Now](https://ychenfen.github.io/mingxi-web/)**
+
+*跨平台PWA游戏助手，支持Mac/Windows/iOS/Android全平台*
+
+</div>
+
+---
 
 ## 📱 跨平台解决方案
 
@@ -27,8 +41,11 @@ npx http-server -p 8080
 # 手机: http://[电脑IP]:8080
 ```
 
-#### 方法二：在线部署
-1. **GitHub Pages**: 免费静态网站托管
+#### 方法二：在线访问（推荐）
+🌐 **直接访问**: https://ychenfen.github.io/mingxi-web/
+
+**其他部署选项**:
+1. **GitHub Pages**: 免费静态网站托管 ✅
 2. **Vercel**: 零配置部署
 3. **Netlify**: 支持表单和函数
 
